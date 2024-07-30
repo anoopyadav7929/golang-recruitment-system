@@ -3,7 +3,6 @@ package utils
 import (
     "fmt"
     "time"
-
     jwt "github.com/dgrijalva/jwt-go"
 )
 
@@ -35,17 +34,14 @@ func parseToken(tokenStr string) (*jwt.Token, error) {
     return token, nil
 }
 
-// ExtractEmailFromToken extracts the email from a JWT token.
+// two purpose , first validate, second extracts the email
 func ExtractEmailFromToken(tokenStr string) (string, error) {
-    // Parse the token
     token, err := parseToken(tokenStr)
     if err != nil {
         return "", err
     }
 
-    // Validate and extract claims
     if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-        // Extract email from claims
         email, ok := claims["email"].(string)
         if !ok {
             return "", fmt.Errorf("email claim not found")
