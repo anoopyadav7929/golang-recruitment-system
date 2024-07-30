@@ -17,6 +17,7 @@ type User struct {
 }
 
 type Profile struct {
+	applicant         User
 	ResumeFileAddress string `json:"resume_file_address"`
 	Skills            string `json:"skills"`
 	Education         string `json:"education"`
@@ -29,10 +30,10 @@ type Profile struct {
 type Job struct {
 	Title             string    `json:"title"`
 	Description       string    `json:"description"`
-	PostedOn          time.Time `json:"posted_on"`
-	TotalApplications int       `json:"total_applications"`
+	PostedOn          *time.Time `json:"posted_on"`
+	TotalApplications int64     `json:"total_applications"`
 	CompanyName       string    `json:"company_name"`
-	PostedBy          User      `json:"posted_by"`
+	PostedBy          int64     `json:"posted_by"`
 }
 
 type Resume struct {

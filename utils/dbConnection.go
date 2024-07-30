@@ -11,7 +11,9 @@ import (
 var db *gorm.DB
 
 func InitializeDB() *gorm.DB {
-	creds := "local:root@tcp(127.0.0.1:3306)/golang_project?" // charset=utf8mb4&parseTime=True&loc=Local"
+
+	// parse time is true and local time , india 
+	creds := "local:root@tcp(127.0.0.1:3306)/golang_project?charset=utf8mb4&parseTime=True&loc=Local"
 
 	var err error
 	db, err = gorm.Open(mysql.Open(creds), &gorm.Config{})

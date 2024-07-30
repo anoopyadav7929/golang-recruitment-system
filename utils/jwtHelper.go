@@ -9,10 +9,11 @@ import (
 var jwtSecret = []byte("your_secret_key")
 
 // GenerateToken creates a new JWT token with the provided email.
-func GenerateToken(email string) (string, error) {
+func GenerateToken(email string , userType string) (string, error) {
     // Create a new token with claims
     token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
         "email": email,
+        "user_type" : userType,
         "exp":   time.Now().Add(time.Hour * 124).Unix(),
     })
     return token.SignedString(jwtSecret)

@@ -2,7 +2,6 @@ package serializer
 
 import (
 	"errors"
-	"fmt"
 	"golang-project/models"
 	constants "golang-project/utils"
 	"regexp"
@@ -22,7 +21,6 @@ func ValidateUser(user *models.User) error {
 	if user.UserType != constants.Admin {
 		user.UserType = constants.Applicant
 	}
-	fmt.Println(user.UserType)
 
 	// Check if Email is not empty and has a valid format
 	if strings.TrimSpace(user.Email) == "" {

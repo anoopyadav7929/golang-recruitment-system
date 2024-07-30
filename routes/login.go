@@ -35,7 +35,7 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	token, err := utils.GenerateToken(existingUser.Email)
+	token, err := utils.GenerateToken(existingUser.Email , existingUser.UserType)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not create token"})
 		return
