@@ -26,9 +26,7 @@ func main() {
 	router.POST("/admin/job", routes.CreateJob)                              // Admin - Create job
 	router.GET("/admin/applicants", routes.GetAllApplicants)                 // Admin - Get all applicants from user DB
 	router.GET("/admin/applicant/:applicant_id", routes.GetApplicantDetails) // Admin - Fetch single applicant data
-
-	// Job and applicants
-	router.GET("/admin/job/:job_id", routes.GetJobAndApplicants) // Fetch job and applied applicants details
+	router.GET("/admin/job/:job_id", routes.GetJobAndApplicants) // Admin - Fetch job and applied applicants details
 
 	router.Run(":8080")
 }
