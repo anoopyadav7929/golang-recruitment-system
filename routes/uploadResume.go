@@ -3,7 +3,6 @@ package routes
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"io"
 	"path/filepath"
 	"strings"
@@ -127,7 +126,6 @@ func UploadResume(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to parse external API response"})
 		return
 	}
-	fmt.Println(responseData)
 
 	skills, _ := json.Marshal(responseData["skills"])
 	education, _ := json.Marshal(responseData["education"])
@@ -153,11 +151,13 @@ func UploadResume(c *gin.Context) {
 
 	// Update or create the profile entry
 	if profileResult.RowsAffected > 0 {
-		if err := db.Model(&existingProfile).Updates(profile).Error; err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update profile"})
+		// Update the existing profile
+		if err := db.Table("profiles").Where("user_id = ?", existingProfile.UserId).Updates(profile).Error; err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
 	} else {
+		// Create a new profile
 		if err := db.Create(&profile).Error; err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create profile"})
 			return

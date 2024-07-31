@@ -62,17 +62,36 @@ func GetJobAndApplicants(c *gin.Context) {
 		var profile models.Profile
 		if err := db.First(&user, "id = ?", application.UserId).Error; err == nil {
 			if err := db.First(&profile, "user_id = ?", application.UserId).Error; err == nil {
+
+				var skills []string
+				var education []map[string]interface{}
+				var experience []map[string]interface{}
+				// beautify the response
+				if !utils.UnmarshalJSONField(profile.Skills, &skills, c) ||
+					!utils.UnmarshalJSONField(profile.Education, &education, c) ||
+					!utils.UnmarshalJSONField(profile.Experience, &experience, c) {
+					return
+				}
+
 				applicants = append(applicants, gin.H{
-					"user":    user,
-					"profile": profile,
+					"user": user,
+					"profile": gin.H{
+						"resume_id":  profile.ResumeId,
+						"skills":     skills,
+						"education":  education,
+						"experience": experience,
+						"name":       profile.Name,
+						"email":      profile.Email,
+						"phone":      profile.Phone,
+					},
 				})
 			}
 		}
 	}
 
 	data := gin.H{
-		"job details":                           job,
-		"applicant, resumeid and their profile": applicants,
+		"Job Details": job,
+		"applicants":  applicants,
 	}
 
 	c.JSON(http.StatusOK, data)

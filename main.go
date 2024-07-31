@@ -28,7 +28,7 @@ func main() {
 	router.GET("/admin/applicant/:applicant_id", routes.GetApplicantDetails) // Admin - Fetch single applicant data
 
 	// Job and applicants
-	router.POST("/admin/job/:job_id", routes.GetJobAndApplicants) // Fetch job and applicants details
+	router.GET("/admin/job/:job_id", routes.GetJobAndApplicants) // Fetch job and applied applicants details
 
 	router.Run(":8080")
 }

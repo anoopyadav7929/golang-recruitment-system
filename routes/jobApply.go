@@ -34,6 +34,13 @@ func ApplyToJob(c *gin.Context) {
 		return
 	}
 
+	// check user have uploded resume or not
+	var resume models.Resume
+	if err := db.First(&resume, "user_id = ?", user.Id).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Please upload resume first before applying for job"})
+		return
+	}
+
 	// Retrieve job ID from query parameter
 	jobId := c.Param("job_id")
 	if jobId == "" {
