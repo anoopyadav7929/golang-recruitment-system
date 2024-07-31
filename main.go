@@ -1,59 +1,34 @@
 package main
 
 import (
-    "github.com/gin-gonic/gin"
-    "golang-project/routes"
+	"golang-project/routes"
+
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
-    router := gin.Default()
+	router := gin.Default()
 
-    // Users routes
-    router.POST("/signup", routes.Signup)    // create or return logic
-    router.POST("/auth/login", routes.Login)    // auth/endpoint - jwt required
-    // router.GET("auth/jobs/apply", routes.ApplyForJob)    // applicant
+	// Users routes
+	router.POST("/signup", routes.Signup)                 // Create or return logic
+	router.POST("/login", routes.Login)                   // JWT create
+	router.GET("/jobs", routes.GetAllJobs)                // Get all jobs
+	router.POST("/jobs/apply/:job_id", routes.ApplyToJob) // Apply to specific job
 
+	// Resume upload and retrieval
+	router.POST("/upload-resume", routes.UploadResume) // Upload resume in DB table as binary BLOB
 
-    // did this step as i wanted to use only One Database ,image uploading directly is paid
-    // this uploads resume in DB table resume as binary BLOB
-    router.POST("/auth/upload-resume", routes.UploadResume)   
+	// these are extra api , for viewing full resume
+	router.GET("/read-resume", routes.UserGetResume)        // Convert binary BLOB to image for applicant user, can view their resume
+	router.GET("/admin/read-resume", routes.AdminGetResume) // For admin, pass email or user_id in body
 
-    // this re-convert binary blob to image 
-    // (for user - requires only valid auth token)
-    router.GET("/auth/read-resume", routes.UserGetResume)
-    // (for admin - we cant use user's auth token so pass email or user_id in body)
-    router.GET("/admin/read-resume", routes.AdminGetResume)
+	// Admin routes
+	router.POST("/admin/job", routes.CreateJob)                              // Admin - Create job
+	router.GET("/admin/applicants", routes.GetAllApplicants)                 // Admin - Get all applicants from user DB
+	router.GET("/admin/applicant/:applicant_id", routes.GetApplicantDetails) // Admin - Fetch single applicant data
 
+	// Job and applicants
+	router.POST("/admin/job/:job_id", routes.GetJobAndApplicants) // Fetch job and applicants details
 
-    router.POST("/admin/job", routes.CreateJob)   // admin auth create job
-
-    router.GET("/jobs", routes.GetAllJobs)   // auth user/admin  get all job
-
-
-
-
-
-
-    // GET /admin/job/{job_id}: Authenticated API for fetching information regarding a job
-    // opening. Returns details about the job opening and a list of applicants. Only Admin type
-    // users can access this API.
-    // router.GET("admin/job/:job_id", routes.GetJob) // admin 
-
-
-    // GET /admin/applicants: Authenticated API for fetching a list of all users in the system. Only
-    // Admin type users can access this API.
-    // router.GET("/admin/applicants", routes.GetAllApplicants)  // admin auth 
-
-
-    // GET /admin/applicant/{applicant_id}: Authenticated API for fetching extracted data of an
-    // applicant. Only Admin type users can access this API.
-    // router.GET("/admin/applicant/:applicant_id", routes.GetApplicantDetails)
-
-
-//     GET /jobs/apply?job_id={job_id}: Authenticated API for applying to a particular job. Only
-// Applicant users are allowed to apply for jobs.
-    // router.GET("/applicant/:applicant_id", routes.GetApplicantDetails)
-
-
-    router.Run(":8080")  
+	router.Run(":8080")
 }

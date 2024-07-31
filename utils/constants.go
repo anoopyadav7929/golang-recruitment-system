@@ -14,3 +14,8 @@ const (
 	Name             = "name"
 	Phone            = "phone"
 )
+
+const (
+	ApiUrl = "https://api.apilayer.com/resume_parser/upload"
+	ApiKey = "XX1ep2sIDsHoufe2VVOplOG4QJYGSste"
+)

@@ -1,11 +1,15 @@
 package utils
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"golang-project/models"
+	"net/http"
+	"strings"
 	"time"
 
+	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
 
@@ -45,8 +49,27 @@ func UserDataFromDB(db *gorm.DB, value interface{}) (models.User, error) {
 	return user, nil
 }
 
+// print time in indiaa
 func GetCurrentTime() (time.Time, string) {
 	loc, _ := time.LoadLocation("Asia/Kolkata")
 	currentTime := time.Now().In(loc)
 	return currentTime, currentTime.Format("2006-01-02 15:04:05")
+}
+
+// Convert JSON arrays to comma-separated strings
+func JoinStringSlice(slice []interface{}) string {
+	var strSlice []string
+	for _, item := range slice {
+		strSlice = append(strSlice, item.(string))
+	}
+	return strings.Join(strSlice, ", ")
+}
+
+// response of db converted to beautify json
+func UnmarshalJSONField(jsonStr string, target interface{}, c *gin.Context) bool {
+	if err := json.Unmarshal([]byte(jsonStr), target); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to parse JSON field"})
+		return false
+	}
+	return true
 }
