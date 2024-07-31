@@ -1,2 +1,3 @@
 # golang-recruitment-system
-RestAPI
+
+all api done as requirement in doc provided 
