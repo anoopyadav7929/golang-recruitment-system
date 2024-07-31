@@ -1,3 +1,3 @@
 # golang-recruitment-system
 
-Ist push sign in and login done 
+all api done as requirement in doc provided 
